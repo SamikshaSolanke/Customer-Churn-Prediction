@@ -14,7 +14,6 @@ scaling, and one-hot encoding are fit only on the training fold:
 import logging
 from pathlib import Path
 from typing import Dict
-
 import joblib
 import pandas as pd
 from lightgbm import LGBMClassifier
@@ -23,7 +22,6 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.pipeline import Pipeline
 from xgboost import XGBClassifier
-
 from churn_prediction.config import MODELS_DIR, RANDOM_STATE
 
 logger = logging.getLogger(__name__)
@@ -68,9 +66,7 @@ def build_models(scale_pos_weight: float, random_state: int = RANDOM_STATE) -> D
     }
 
 
-def build_pipelines(
-    models: Dict, preprocessor: ColumnTransformer
-) -> Dict[str, Pipeline]:
+def build_pipelines(models: Dict, preprocessor: ColumnTransformer) -> Dict[str, Pipeline]:
     """Wrap each model with the shared preprocessor in its own Pipeline."""
     return {
         name: Pipeline(steps=[("preprocessor", preprocessor), ("model", model)])
@@ -78,9 +74,7 @@ def build_pipelines(
     }
 
 
-def train_all(
-    pipelines: Dict[str, Pipeline], X_train: pd.DataFrame, y_train: pd.Series
-) -> Dict[str, Pipeline]:
+def train_all(pipelines: Dict[str, Pipeline], X_train: pd.DataFrame, y_train: pd.Series) -> Dict[str, Pipeline]:
     """Fit every pipeline on the training data, in place, and return them."""
     for name, pipeline in pipelines.items():
         logger.info("Training %s...", name)
