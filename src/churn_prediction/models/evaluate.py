@@ -6,7 +6,6 @@ per-model classification reports, and confusion matrix plots.
 import logging
 from pathlib import Path
 from typing import Dict
-
 import matplotlib.pyplot as plt
 import pandas as pd
 from sklearn.metrics import (
@@ -20,15 +19,12 @@ from sklearn.metrics import (
     roc_auc_score,
 )
 from sklearn.pipeline import Pipeline
-
 from churn_prediction.config import PLOTS_DIR
 
 logger = logging.getLogger(__name__)
 
 
-def compare_models(
-    pipelines: Dict[str, Pipeline], X_eval: pd.DataFrame, y_eval: pd.Series
-) -> pd.DataFrame:
+def compare_models(pipelines: Dict[str, Pipeline], X_eval: pd.DataFrame, y_eval: pd.Series) -> pd.DataFrame:
     """
     Score every pipeline on the given (typically validation) set and return
     a table sorted by PR-AUC descending - the most informative ranking
@@ -54,12 +50,7 @@ def compare_models(
     return pd.DataFrame(results).sort_values(by="PR-AUC", ascending=False)
 
 
-def print_classification_reports(
-    pipelines: Dict[str, Pipeline],
-    X_eval: pd.DataFrame,
-    y_eval: pd.Series,
-    target_names=("No Churn", "Churn"),
-) -> Dict[str, str]:
+def print_classification_reports(pipelines: Dict[str, Pipeline], X_eval: pd.DataFrame, y_eval: pd.Series, target_names=("No Churn", "Churn")) -> Dict[str, str]:
     """Return (and log) a classification report string per model."""
     reports = {}
     for name, pipeline in pipelines.items():
@@ -71,13 +62,7 @@ def print_classification_reports(
     return reports
 
 
-def plot_confusion_matrices(
-    pipelines: Dict[str, Pipeline],
-    X_eval: pd.DataFrame,
-    y_eval: pd.Series,
-    target_names=("No Churn", "Churn"),
-    plots_dir: Path = PLOTS_DIR,
-) -> Dict[str, Path]:
+def plot_confusion_matrices(pipelines: Dict[str, Pipeline], X_eval: pd.DataFrame, y_eval: pd.Series, target_names=("No Churn", "Churn"), plots_dir: Path = PLOTS_DIR) -> Dict[str, Path]:
     """Plot and save a confusion matrix heatmap for each model."""
     plots_dir.mkdir(parents=True, exist_ok=True)
     saved_paths = {}
